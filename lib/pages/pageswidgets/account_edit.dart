@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 
 class EditAccount extends StatefulWidget {
+  const EditAccount({Key? key}) : super(key: key);
+
   @override
   _EditAccountState createState() => _EditAccountState();
 }
@@ -10,7 +12,7 @@ class EditAccount extends StatefulWidget {
 class _EditAccountState extends State<EditAccount> {
   final _expenseformKey = GlobalKey<FormState>();
   String errorMessage = '';
-  String _shelfCode = '';
+  String _paymentType = '';
   bool cont = false;
   @override
   Widget build(BuildContext context) {
@@ -31,12 +33,13 @@ class _EditAccountState extends State<EditAccount> {
                         TextFormField(
                           maxLength: 50,
                           onTap: () {},
-                          onSaved: (value) => _shelfCode = value!,
+                          onSaved: (value) => _paymentType = value!,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please enter an payment type definition.';
-                            } else
+                            } else {
                               return null;
+                            }
                           },
                         ),
                       ],

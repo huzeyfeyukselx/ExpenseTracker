@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.white,
         primarySwatch: Colors.blueGrey,
       ),
-      home: CheckLogin(),
+      home: const CheckLogin(),
     );
   }
 }

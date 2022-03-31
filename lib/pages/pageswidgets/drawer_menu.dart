@@ -4,114 +4,141 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../acconunt_detail.dart';
 
-class GetDrawerMenu extends StatelessWidget {
-  const GetDrawerMenu({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text(
-              FirebaseAuth.instance.currentUser!.displayName.toString(),
-              style: const TextStyle(fontSize: 20),
-            ),
-            accountEmail: Text(
-              FirebaseAuth.instance.currentUser!.email.toString(),
-              style: const TextStyle(fontSize: 13),
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: const Color.fromARGB(255, 17, 10, 10),
-              child: Text(
-                FirebaseAuth.instance.currentUser!.displayName
-                    .toString()
-                    .substring(0, 1),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold),
-              ),
+Widget getDrawer(BuildContext context) {
+  return Drawer(
+    child: Column(
+      children: <Widget>[
+        UserAccountsDrawerHeader(
+          accountName: Text(
+            FirebaseAuth.instance.currentUser!.displayName.toString(),
+            style: const TextStyle(fontSize: 20),
+          ),
+          accountEmail: Text(
+            FirebaseAuth.instance.currentUser!.email.toString(),
+            style: const TextStyle(fontSize: 13),
+          ),
+          currentAccountPicture: CircleAvatar(
+            backgroundColor: const Color.fromARGB(255, 17, 10, 10),
+            child: Text(
+              FirebaseAuth.instance.currentUser!.displayName
+                  .toString()
+                  .substring(0, 1),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold),
             ),
           ),
-          Expanded(
-            child: ListView(
-              children: <Widget>[
-                ListTile(
-                  leading: const Icon(
-                    Icons.list_alt,
-                    size: 15,
-                  ),
-                  title: const Text(
-                    "Expense Definition",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ExpenseDefinitons()));
-                  },
+        ),
+        Expanded(
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(
+                  Icons.list_alt,
+                  size: 15,
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.payment_rounded,
-                    size: 15,
-                  ),
-                  title: const Text(
-                    "Payment Definition",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const PaymentDefinitons()));
-                  },
+                title: const Text(
+                  "Expense Definition",
+                  style: TextStyle(fontSize: 15),
                 ),
-                ExpansionTile(
-                  title: const Text(
-                    "Settings",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  leading: const Icon(
-                    Icons.settings,
-                    size: 15,
-                  ),
-                  children: <Widget>[
-                    ListTile(
-                      title: const Text(
-                        "Account",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AccountDetail()));
-                      },
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ExpenseDefinitons()));
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.payment_rounded,
+                  size: 15,
+                ),
+                title: const Text(
+                  "Payment Definition",
+                  style: TextStyle(fontSize: 15),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PaymentDefinitons()));
+                },
+              ),
+              ExpansionTile(
+                title: const Text(
+                  "Settings",
+                  style: TextStyle(fontSize: 15),
+                ),
+                leading: const Icon(
+                  Icons.settings,
+                  size: 15,
+                ),
+                children: <Widget>[
+                  ListTile(
+                    title: const Text(
+                      "Account",
+                      style: TextStyle(fontSize: 15),
                     ),
-                  ],
-                ),
-                ListTile(
-                  title: const Text(
-                    "Logout",
-                    style: TextStyle(fontSize: 15),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AccountDetail()));
+                    },
                   ),
-                  leading: Icon(Icons.logout_rounded),
-                  onTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                  },
+                ],
+              ),
+              ListTile(
+                title: const Text(
+                  "Logout",
+                  style: TextStyle(fontSize: 15),
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
+                leading: const Icon(Icons.logout_rounded),
+                onTap: () async {
+                  Navigator.pop(context);
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Align(
+                          child: SizedBox(
+                            width: 500,
+                            child: AlertDialog(
+                              title: const Text("Logout!"),
+                              content: const Text("Are you want to logout?"),
+                              actions: <Widget>[
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Cancel"),
+                                ),
+                                FlatButton(
+                                  child: const Text(
+                                    'Logout',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () async {
+                                    await FirebaseAuth.instance.signOut();
+                                    Navigator.popUntil(
+                                        context, ModalRoute.withName('/'));
+                                  },
+                                  color: const Color.fromARGB(255, 175, 13, 1),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+                },
+              ),
+            ],
+          ),
+        )
+      ],
+    ),
+  );
 }

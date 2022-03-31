@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddPaymentType extends StatefulWidget {
+  const AddPaymentType({Key? key}) : super(key: key);
+
   @override
   _AddPaymentTypeState createState() => _AddPaymentTypeState();
 }
@@ -39,8 +41,9 @@ class _AddPaymentTypeState extends State<AddPaymentType> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return errorMessage;
-                            } else
+                            } else {
                               return null;
+                            }
                           },
                         ),
                       ],
@@ -86,7 +89,10 @@ class _AddPaymentTypeState extends State<AddPaymentType> {
 }
 
 Future saveCahanges(String paymentType) async {
-  FirebaseFirestore.instance.collection("PaymentTypes").doc(paymentType).set({
+  FirebaseFirestore.instance
+      .collection("PaymentTypes")
+      .doc(paymentType + "_" + FirebaseAuth.instance.currentUser!.uid)
+      .set({
     'TypeName': paymentType,
     'UserID': FirebaseAuth.instance.currentUser!.uid
   });

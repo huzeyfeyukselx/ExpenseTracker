@@ -12,8 +12,11 @@ class CheckLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ChangeNotifierProvider(
-        create: (context) => GoogleSignInProvider(),
+      body: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => GoogleSignInProvider()),
+          ChangeNotifierProvider(create: (context) => TotalAmounCounter()),
+        ],
         child: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {

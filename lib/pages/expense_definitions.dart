@@ -6,17 +6,12 @@ import 'package:flutter/material.dart';
 import 'pageswidgets/delete_dialog.dart';
 import 'pageswidgets/expense_type_add_popup.dart';
 
-class ExpenseDefinitons extends StatefulWidget {
+class ExpenseDefinitons extends StatelessWidget {
   const ExpenseDefinitons({Key? key}) : super(key: key);
 
   @override
-  State<ExpenseDefinitons> createState() => _ExpenseDefinitonsState();
-}
-
-class _ExpenseDefinitonsState extends State<ExpenseDefinitons> {
-  String title = 'Expense Definitons';
-  @override
   Widget build(BuildContext context) {
+    String title = 'Expense Definitons';
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -39,7 +34,7 @@ class _ExpenseDefinitonsState extends State<ExpenseDefinitons> {
                   isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString())
               .snapshots(),
           builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
+            if (snapshot.hasData && snapshot.data.docs.length != 0) {
               List<DocumentSnapshot> list = snapshot.data!.docs;
               return ListView.builder(
                 itemCount: list.length,
@@ -51,11 +46,7 @@ class _ExpenseDefinitonsState extends State<ExpenseDefinitons> {
                             .toString()),
                     trailing: GestureDetector(
                       onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext buildContext) {
-                              return DeleteDialog(list[index], context);
-                            });
+                        DeleteDialog(list[index], context);
                       },
                       child: Icon(
                         Icons.delete,
@@ -65,6 +56,9 @@ class _ExpenseDefinitonsState extends State<ExpenseDefinitons> {
                   );
                 },
               );
+            } else if (snapshot.data == null ||
+                snapshot.data.docs.length == 0) {
+              return Center(child: Center(child: Text("Data Not Found")));
             } else {
               return Center(child: CircularProgressIndicator());
             }

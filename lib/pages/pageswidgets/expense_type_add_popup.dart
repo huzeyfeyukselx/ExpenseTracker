@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddExpenseType extends StatefulWidget {
+  const AddExpenseType({Key? key}) : super(key: key);
+
   @override
   _AddExpenseTypeState createState() => _AddExpenseTypeState();
 }
@@ -39,8 +41,9 @@ class _AddExpenseTypeState extends State<AddExpenseType> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return errorMessage;
-                            } else
+                            } else {
                               return null;
+                            }
                           },
                         ),
                       ],
@@ -86,7 +89,10 @@ class _AddExpenseTypeState extends State<AddExpenseType> {
 }
 
 Future saveCahanges(String expenseType) async {
-  FirebaseFirestore.instance.collection("ExpenseTypes").doc(expenseType).set({
+  FirebaseFirestore.instance
+      .collection("ExpenseTypes")
+      .doc(expenseType + "_" + FirebaseAuth.instance.currentUser!.uid)
+      .set({
     'TypeName': expenseType,
     'UserID': FirebaseAuth.instance.currentUser!.uid
   });

@@ -6,14 +6,9 @@ import 'package:flutter/material.dart';
 import 'pageswidgets/delete_dialog.dart';
 import 'pageswidgets/payment_type_add_popup.dart';
 
-class PaymentDefinitons extends StatefulWidget {
+class PaymentDefinitons extends StatelessWidget {
   const PaymentDefinitons({Key? key}) : super(key: key);
 
-  @override
-  State<PaymentDefinitons> createState() => _PaymentDefinitonsState();
-}
-
-class _PaymentDefinitonsState extends State<PaymentDefinitons> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +33,7 @@ class _PaymentDefinitonsState extends State<PaymentDefinitons> {
                   isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString())
               .snapshots(),
           builder: (context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
+            if (snapshot.hasData && snapshot.data.docs.length != 0) {
               List<DocumentSnapshot> list = snapshot.data!.docs;
               return ListView.builder(
                 itemCount: list.length,
@@ -50,11 +45,7 @@ class _PaymentDefinitonsState extends State<PaymentDefinitons> {
                             .toString()),
                     trailing: GestureDetector(
                       onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext buildContext) {
-                              return DeleteDialog(list[index], context);
-                            });
+                        DeleteDialog(list[index], context);
                       },
                       child: Icon(
                         Icons.delete,
@@ -64,6 +55,9 @@ class _PaymentDefinitonsState extends State<PaymentDefinitons> {
                   );
                 },
               );
+            } else if (snapshot.data == null ||
+                snapshot.data.docs.length == 0) {
+              return Center(child: Center(child: Text("Data Not Found")));
             } else {
               return Center(child: CircularProgressIndicator());
             }
