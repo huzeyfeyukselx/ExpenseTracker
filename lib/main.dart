@@ -1,7 +1,7 @@
-import 'package:expensetracer/helpers/check-login.dart';
+import 'package:expensetracer/helpers/check_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'helpers/check-login.dart';
+import 'helpers/check_login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +16,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Expense Tracker',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        backgroundColor: Colors.white,
+        primarySwatch: Colors.blueGrey,
+      ),
       home: CheckLogin(),
     );
   }
