@@ -63,33 +63,38 @@ class _HomeState extends State<Home> {
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.post_add_outlined),
             onPressed: () async {
-              QuerySnapshot querySnapshot = await GetPaymentTypes();
-              if (querySnapshot.docs.isNotEmpty) {
-                querySnapshot = await GetExpenseTypes();
-              }
+              QuerySnapshot expenseTypesQS = await GetExpenseTypes();
+              QuerySnapshot paymentTypesQS = await GetPaymentTypes();
 
-              querySnapshot.docs.isNotEmpty
-                  ? await showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AddExpense())
-                  : await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Data Error!"),
-                          content: Text(
-                              "Please check the \"Expende Types\" and \"Payment Types\"."),
-                          actions: [
-                            TextButton(
-                              child: Text("OK"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      },
+              if (expenseTypesQS.docs.isNotEmpty &&
+                  paymentTypesQS.docs.isNotEmpty) {
+                await showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AddExpense(
+                          dateTime: filterMountYear,
+                          paymentTypes: paymentTypesQS,
+                          expenseTypes: expenseTypesQS,
+                        ));
+              } else {
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Data Error!"),
+                      content: Text(
+                          "Please check the \"Expende Types\" and \"Payment Types\"."),
+                      actions: [
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
                     );
+                  },
+                );
+              }
             }),
         body: Column(
           children: [
