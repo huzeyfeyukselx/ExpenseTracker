@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 
 class GoogleSignInProvider extends ChangeNotifier {
   final googleSignIn = GoogleSignIn();
@@ -44,11 +45,13 @@ class GoogleSignInProvider extends ChangeNotifier {
   }
 }
 
-class TotalAmounCounter extends ChangeNotifier {
+class TotalAmounCounter with ChangeNotifier {
   double _total = 0;
+  final filterFormatMask = DateFormat('MM-yyyy');
 
   double get total => _total;
   set total(double total) => _total = total;
+
   void addAmount(List<DocumentSnapshot> snapshot) {
     total = 0;
     snapshot.isNotEmpty
@@ -58,5 +61,21 @@ class TotalAmounCounter extends ChangeNotifier {
         : _total = 0;
 
     notifyListeners();
+  }
+
+  List<DocumentSnapshot<Object?>> getList(
+      List<DocumentSnapshot> list, DateTime datetime) {
+    for (int i = (list.length - 1); i > -1; i--) {
+      filterFormatMask.format(
+                  (list[i].data() as Map<String, dynamic>)['DateTime']
+                      .toDate()) !=
+              filterFormatMask.format(datetime)
+          ? list.remove(list[i])
+          : null;
+    }
+    addAmount(list);
+
+    notifyListeners();
+    return list;
   }
 }

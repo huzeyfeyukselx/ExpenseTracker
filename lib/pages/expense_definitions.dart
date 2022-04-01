@@ -28,11 +28,7 @@ class ExpenseDefinitons extends StatelessWidget {
                 builder: (BuildContext context) => AddExpenseType());
           }),
       body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("ExpenseTypes")
-              .where('UserID',
-                  isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString())
-              .snapshots(),
+          stream: GetExpenseTypes(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.hasData && snapshot.data.docs.length != 0) {
               List<DocumentSnapshot> list = snapshot.data!.docs;
@@ -66,3 +62,9 @@ class ExpenseDefinitons extends StatelessWidget {
     );
   }
 }
+
+Stream<QuerySnapshot> GetExpenseTypes() => FirebaseFirestore.instance
+    .collection("ExpenseTypes")
+    .where('UserID',
+        isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString())
+    .snapshots();

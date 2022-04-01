@@ -23,8 +23,8 @@ class _HomeState extends State<Home> {
   final filterFormatMask = DateFormat('MM-yyyy');
   late List<DocumentSnapshot> list;
 
-  double total = 0;
   DateTime filterMountYear = DateTime.now();
+
   List<String> months = [
     'January',
     'February',
@@ -49,13 +49,13 @@ class _HomeState extends State<Home> {
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ActionChip(
-                  label: Text(
-                      Provider.of<TotalAmounCounter>(context).total.toString() +
-                          " ₺"),
-                  onPressed: () {}),
+            Consumer(
+              builder: (context, TotalAmounCounter mySayac, widget) => Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ActionChip(
+                    label: Text(mySayac.total.toString() + " ₺"),
+                    onPressed: () {}),
+              ),
             )
           ],
         ),
@@ -63,20 +63,16 @@ class _HomeState extends State<Home> {
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.post_add_outlined),
             onPressed: () async {
-              QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-                  .collection("PaymentTypes")
-                  .get();
+              QuerySnapshot querySnapshot = await GetPaymentTypes();
               if (querySnapshot.docs.isNotEmpty) {
-                querySnapshot = await FirebaseFirestore.instance
-                    .collection("ExpenseTypes")
-                    .get();
+                querySnapshot = await GetExpenseTypes();
               }
 
               querySnapshot.docs.isNotEmpty
-                  ? showDialog(
+                  ? await showDialog(
                       context: context,
                       builder: (BuildContext context) => AddExpense())
-                  : showDialog(
+                  : await showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
@@ -131,25 +127,13 @@ class _HomeState extends State<Home> {
               child: Card(
                 color: Colors.grey.shade300,
                 child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("Expenses")
-                        .where('UserID',
-                            isEqualTo: FirebaseAuth.instance.currentUser!.uid
-                                .toString())
-                        .snapshots(),
+                    stream: GetExpenseSnapshot(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData && snapshot.data.docs.length != 0) {
                         list = snapshot.data!.docs;
-                        for (int i = (list.length - 1); i > -1; i--) {
-                          filterFormatMask.format((list[i].data()
-                                          as Map<String, dynamic>)['DateTime']
-                                      .toDate()) !=
-                                  filterFormatMask.format(filterMountYear)
-                              ? list.remove(list[i])
-                              : null;
-                        }
-                        Provider.of<TotalAmounCounter>(context, listen: false)
-                            .addAmount(list);
+
+                        list = Provider.of<TotalAmounCounter>(context)
+                            .getList(list, filterMountYear);
 
                         return list.isNotEmpty
                             ? ListView.builder(
@@ -204,3 +188,13 @@ class _HomeState extends State<Home> {
         ));
   }
 }
+
+Future<QuerySnapshot> GetPaymentTypes() =>
+    FirebaseFirestore.instance.collection("PaymentTypes").get();
+Future<QuerySnapshot> GetExpenseTypes() =>
+    FirebaseFirestore.instance.collection("ExpenseTypes").get();
+Stream<QuerySnapshot> GetExpenseSnapshot() => FirebaseFirestore.instance
+    .collection("Expenses")
+    .where('UserID',
+        isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString())
+    .snapshots();

@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class EditAccount extends StatefulWidget {
@@ -11,8 +13,9 @@ class EditAccount extends StatefulWidget {
 
 class _EditAccountState extends State<EditAccount> {
   final _expenseformKey = GlobalKey<FormState>();
-  String errorMessage = '';
-  String _paymentType = '';
+  late String fullName;
+  late String phoneNumber;
+
   bool cont = false;
   @override
   Widget build(BuildContext context) {
@@ -31,12 +34,26 @@ class _EditAccountState extends State<EditAccount> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
+                          autofocus: true,
                           maxLength: 50,
                           onTap: () {},
-                          onSaved: (value) => _paymentType = value!,
+                          onSaved: (value) => fullName = value!,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter an payment type definition.';
+                              return 'Please enter your name.';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        TextFormField(
+                          maxLength: 10,
+                          keyboardType: TextInputType.phone,
+                          onTap: () {},
+                          onSaved: (value) => phoneNumber = value!,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your phone.';
                             } else {
                               return null;
                             }
@@ -45,15 +62,6 @@ class _EditAccountState extends State<EditAccount> {
                       ],
                     ),
                   ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        errorMessage,
-                        style: const TextStyle(
-                            color: Colors.redAccent,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 12),
-                      )),
                   Row(
                     children: [
                       Expanded(

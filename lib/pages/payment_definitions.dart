@@ -27,11 +27,7 @@ class PaymentDefinitons extends StatelessWidget {
                 builder: (BuildContext context) => AddPaymentType());
           }),
       body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("PaymentTypes")
-              .where('UserID',
-                  isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString())
-              .snapshots(),
+          stream: GetPaymentTypes(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.hasData && snapshot.data.docs.length != 0) {
               List<DocumentSnapshot> list = snapshot.data!.docs;
@@ -65,3 +61,9 @@ class PaymentDefinitons extends StatelessWidget {
     );
   }
 }
+
+Stream<QuerySnapshot> GetPaymentTypes() => FirebaseFirestore.instance
+    .collection("PaymentTypes")
+    .where('UserID',
+        isEqualTo: FirebaseAuth.instance.currentUser!.uid.toString())
+    .snapshots();
