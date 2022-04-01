@@ -21,6 +21,8 @@ class CheckLogin extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             final provider = Provider.of<GoogleSignInProvider>(context);
+            Provider.of<GoogleSignInProvider>(context).checkAndSaveUser();
+
             if (provider.isSigningIn) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData) {

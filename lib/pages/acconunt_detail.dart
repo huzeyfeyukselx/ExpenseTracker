@@ -4,6 +4,8 @@ import 'package:expensetracer/pages/pageswidgets/account_edit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../helpers/firebase_auth.dart';
+
 class AccountDetail extends StatefulWidget {
   const AccountDetail({Key? key}) : super(key: key);
 
@@ -38,7 +40,7 @@ class _AccountDetailState extends State<AccountDetail> {
           children: [
             ListTile(
               title: Text(
-                FirebaseAuth.instance.currentUser!.displayName.toString(),
+                Statics.User['FullName'].toString(),
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               subtitle: Text("Name & Surname"),

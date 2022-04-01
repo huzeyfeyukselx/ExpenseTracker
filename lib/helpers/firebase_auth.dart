@@ -1,8 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+
+class Statics {
+  static var User;
+}
 
 class GoogleSignInProvider extends ChangeNotifier {
   final googleSignIn = GoogleSignIn();
@@ -36,6 +42,23 @@ class GoogleSignInProvider extends ChangeNotifier {
       await FirebaseAuth.instance.signInWithCredential(credential);
 
       isSigningIn = false;
+    }
+  }
+
+  Future checkAndSaveUser() async {
+    var id = FirebaseAuth.instance.currentUser!.uid;
+    var name = FirebaseAuth.instance.currentUser!.displayName;
+    var email = FirebaseAuth.instance.currentUser!.email;
+    Statics.User =
+        await FirebaseFirestore.instance.collection("Users").doc(id).get();
+
+    if (!(Statics.User.exists)) {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(id)
+          .set({'FullName': name, 'Phone': "5555555555", 'Email': email});
+      Statics.User =
+          await FirebaseFirestore.instance.collection("Users").doc(id).get();
     }
   }
 

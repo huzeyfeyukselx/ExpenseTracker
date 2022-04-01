@@ -2,7 +2,11 @@
 
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../helpers/firebase_auth.dart';
 
 class EditAccount extends StatefulWidget {
   const EditAccount({Key? key}) : super(key: key);
@@ -13,10 +17,21 @@ class EditAccount extends StatefulWidget {
 
 class _EditAccountState extends State<EditAccount> {
   final _expenseformKey = GlobalKey<FormState>();
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+
   late String fullName;
   late String phoneNumber;
 
   bool cont = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _name.text = Statics.User['FullName'].toString();
+    _phone.text = Statics.User['Phone'].toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -34,6 +49,7 @@ class _EditAccountState extends State<EditAccount> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
+                          controller: _name,
                           autofocus: true,
                           maxLength: 50,
                           onTap: () {},
@@ -47,6 +63,7 @@ class _EditAccountState extends State<EditAccount> {
                           },
                         ),
                         TextFormField(
+                          controller: _phone,
                           maxLength: 10,
                           keyboardType: TextInputType.phone,
                           onTap: () {},
@@ -78,7 +95,10 @@ class _EditAccountState extends State<EditAccount> {
                             'Save',
                             style: TextStyle(color: Colors.white),
                           ),
-                          onPressed: () async {},
+                          onPressed: () async {
+                            await saveCahanges(_name.text, _phone.text);
+                            Navigator.pop(context);
+                          },
                           color: Colors.green,
                         ),
                       ),
@@ -92,4 +112,16 @@ class _EditAccountState extends State<EditAccount> {
       ),
     );
   }
+}
+
+Future saveCahanges(String name, String phone) async {
+  var id = FirebaseAuth.instance.currentUser!.uid;
+  var email = FirebaseAuth.instance.currentUser!.email;
+
+  await FirebaseFirestore.instance
+      .collection("Users")
+      .doc(id)
+      .set({'FullName': name, 'Phone': phone, "Email": email});
+  Statics.User =
+      await FirebaseFirestore.instance.collection("Users").doc(id).get();
 }

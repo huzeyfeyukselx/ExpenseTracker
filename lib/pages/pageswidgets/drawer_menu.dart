@@ -2,6 +2,7 @@ import 'package:expensetracer/pages/expense_definitions.dart';
 import 'package:expensetracer/pages/payment_definitions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../helpers/firebase_auth.dart';
 import '../acconunt_detail.dart';
 
 Widget getDrawer(BuildContext context) {
@@ -10,19 +11,17 @@ Widget getDrawer(BuildContext context) {
       children: <Widget>[
         UserAccountsDrawerHeader(
           accountName: Text(
-            FirebaseAuth.instance.currentUser!.displayName.toString(),
+            Statics.User['FullName'].toString(),
             style: const TextStyle(fontSize: 20),
           ),
           accountEmail: Text(
-            FirebaseAuth.instance.currentUser!.email.toString(),
+            Statics.User['Email'].toString(),
             style: const TextStyle(fontSize: 13),
           ),
           currentAccountPicture: CircleAvatar(
             backgroundColor: const Color.fromARGB(255, 17, 10, 10),
             child: Text(
-              FirebaseAuth.instance.currentUser!.displayName
-                  .toString()
-                  .substring(0, 1),
+              Statics.User['FullName'].toString().substring(0, 1),
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 50,
