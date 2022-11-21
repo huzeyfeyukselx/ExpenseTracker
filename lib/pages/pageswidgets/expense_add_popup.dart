@@ -10,9 +10,7 @@ class AddExpense extends StatefulWidget {
   final paymentTypes;
   final expenseTypes;
 
-  const AddExpense(
-      {Key? key, this.dateTime, this.expenseTypes, this.paymentTypes})
-      : super(key: key);
+  const AddExpense({Key? key, this.dateTime, this.expenseTypes, this.paymentTypes}) : super(key: key);
 
   @override
   _AddExpenseState createState() => _AddExpenseState();
@@ -119,8 +117,7 @@ class _AddExpenseState extends State<AddExpense> {
                               flex: 2,
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
-                                onSaved: (value) => amount =
-                                    value == "" ? 0 : int.parse(value!),
+                                onSaved: (value) => amount = value == "" ? 0 : int.parse(value!),
                               ),
                             ),
                             Container(
@@ -163,16 +160,14 @@ class _AddExpenseState extends State<AddExpense> {
                                 color: Colors.white,
                                 splashColor: Colors.grey[300],
                                 onPressed: () async {
-                                  final DateTime? selected =
-                                      await showDatePicker(
+                                  final DateTime? selected = await showDatePicker(
                                     context: context,
                                     initialDate: currentDate,
                                     firstDate: DateTime(2020),
                                     lastDate: DateTime(2030),
                                   );
 
-                                  if (selected != null &&
-                                      selected != currentDate) {
+                                  if (selected != null && selected != currentDate) {
                                     setState(() {
                                       currentDate = selected;
                                     });
@@ -191,19 +186,19 @@ class _AddExpenseState extends State<AddExpense> {
                   Row(
                     children: [
                       Expanded(
-                        child: FlatButton(
+                        child: FloatingActionButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
                           child: const Text("Cancel"),
-                          color: Colors.grey[300],
+                          backgroundColor: Colors.grey[300],
                         ),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
                       Expanded(
-                        child: FlatButton(
+                        child: FloatingActionButton(
                           child: const Text(
                             'Add',
                             style: TextStyle(color: Colors.white),
@@ -212,12 +207,11 @@ class _AddExpenseState extends State<AddExpense> {
                             _expenseformKey.currentState!.save();
 
                             if (_expenseformKey.currentState!.validate()) {
-                              await saveCahanges(
-                                  exenseType, paymentType, currentDate, amount);
+                              await saveCahanges(exenseType, paymentType, currentDate, amount);
                               Navigator.pop(context);
                             }
                           },
-                          color: Colors.green,
+                          backgroundColor: Colors.green,
                         ),
                       ),
                     ],
@@ -232,8 +226,7 @@ class _AddExpenseState extends State<AddExpense> {
   }
 }
 
-Future saveCahanges(
-    String expenseType, paymentType, DateTime date, int amount) async {
+Future saveCahanges(String expenseType, paymentType, DateTime date, int amount) async {
   var id = FirebaseFirestore.instance.collection('Expenses').doc().id;
   FirebaseFirestore.instance.collection("Expenses").doc(id).set({
     'Amount': amount,

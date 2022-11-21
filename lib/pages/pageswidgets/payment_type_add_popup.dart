@@ -52,7 +52,7 @@ class _AddPaymentTypeState extends State<AddPaymentType> {
                   Row(
                     children: [
                       Expanded(
-                        child: FlatButton(
+                        child: FloatingActionButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -60,7 +60,7 @@ class _AddPaymentTypeState extends State<AddPaymentType> {
                         ),
                       ),
                       Expanded(
-                        child: FlatButton(
+                        child: FloatingActionButton(
                           child: const Text(
                             'Add',
                             style: TextStyle(color: Colors.white),
@@ -73,7 +73,7 @@ class _AddPaymentTypeState extends State<AddPaymentType> {
                               Navigator.pop(context);
                             }
                           },
-                          color: Colors.green,
+                          backgroundColor: Colors.green,
                         ),
                       ),
                     ],
@@ -92,8 +92,5 @@ Future saveCahanges(String paymentType) async {
   FirebaseFirestore.instance
       .collection("PaymentTypes")
       .doc(paymentType + "_" + FirebaseAuth.instance.currentUser!.uid)
-      .set({
-    'TypeName': paymentType,
-    'UserID': FirebaseAuth.instance.currentUser!.uid
-  });
+      .set({'TypeName': paymentType, 'UserID': FirebaseAuth.instance.currentUser!.uid});
 }

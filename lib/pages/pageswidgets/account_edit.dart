@@ -1,7 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +80,7 @@ class _EditAccountState extends State<EditAccount> {
                   Row(
                     children: [
                       Expanded(
-                        child: FlatButton(
+                        child: FloatingActionButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -90,7 +88,7 @@ class _EditAccountState extends State<EditAccount> {
                         ),
                       ),
                       Expanded(
-                        child: FlatButton(
+                        child: FloatingActionButton(
                           child: const Text(
                             'Save',
                             style: TextStyle(color: Colors.white),
@@ -99,7 +97,7 @@ class _EditAccountState extends State<EditAccount> {
                             await saveCahanges(_name.text, _phone.text);
                             Navigator.pop(context);
                           },
-                          color: Colors.green,
+                          backgroundColor: Colors.green,
                         ),
                       ),
                     ],
@@ -118,10 +116,6 @@ Future saveCahanges(String name, String phone) async {
   var id = FirebaseAuth.instance.currentUser!.uid;
   var email = FirebaseAuth.instance.currentUser!.email;
 
-  await FirebaseFirestore.instance
-      .collection("Users")
-      .doc(id)
-      .set({'FullName': name, 'Phone': phone, "Email": email});
-  Statics.User =
-      await FirebaseFirestore.instance.collection("Users").doc(id).get();
+  await FirebaseFirestore.instance.collection("Users").doc(id).set({'FullName': name, 'Phone': phone, "Email": email});
+  Statics.User = await FirebaseFirestore.instance.collection("Users").doc(id).get();
 }

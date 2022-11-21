@@ -10,22 +10,19 @@ Widget getDrawer(BuildContext context) {
     child: Column(
       children: <Widget>[
         UserAccountsDrawerHeader(
-          accountName: Text(
-            Statics.User['FullName'].toString(),
-            style: const TextStyle(fontSize: 20),
+          accountName: const Text(
+            "Statics.User['FullName'].toString()",
+            style: TextStyle(fontSize: 20),
           ),
-          accountEmail: Text(
-            Statics.User['Email'].toString(),
-            style: const TextStyle(fontSize: 13),
+          accountEmail: const Text(
+            "Statics.User['Email'].toString()",
+            style: TextStyle(fontSize: 13),
           ),
           currentAccountPicture: CircleAvatar(
             backgroundColor: const Color.fromARGB(255, 17, 10, 10),
             child: Text(
-              Statics.User['FullName'].toString().substring(0, 1),
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold),
+              "Statics.User['FullName'].toString()".substring(0, 1),
+              style: const TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -43,10 +40,7 @@ Widget getDrawer(BuildContext context) {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ExpenseDefinitons()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ExpenseDefinitons()));
                 },
               ),
               ListTile(
@@ -60,10 +54,7 @@ Widget getDrawer(BuildContext context) {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PaymentDefinitons()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentDefinitons()));
                 },
               ),
               ExpansionTile(
@@ -83,10 +74,7 @@ Widget getDrawer(BuildContext context) {
                     ),
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AccountDetail()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountDetail()));
                     },
                   ),
                 ],
@@ -109,23 +97,22 @@ Widget getDrawer(BuildContext context) {
                               title: const Text("Logout!"),
                               content: const Text("Are you want to logout?"),
                               actions: <Widget>[
-                                FlatButton(
+                                FloatingActionButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
                                   child: const Text("Cancel"),
                                 ),
-                                FlatButton(
+                                FloatingActionButton(
                                   child: const Text(
                                     'Logout',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   onPressed: () async {
                                     await FirebaseAuth.instance.signOut();
-                                    Navigator.popUntil(
-                                        context, ModalRoute.withName('/'));
+                                    Navigator.popUntil(context, ModalRoute.withName('/'));
                                   },
-                                  color: const Color.fromARGB(255, 175, 13, 1),
+                                  backgroundColor: const Color.fromARGB(255, 175, 13, 1),
                                 ),
                               ],
                             ),

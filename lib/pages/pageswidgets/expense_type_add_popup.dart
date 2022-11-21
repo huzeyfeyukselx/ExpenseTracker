@@ -52,7 +52,7 @@ class _AddExpenseTypeState extends State<AddExpenseType> {
                   Row(
                     children: [
                       Expanded(
-                        child: FlatButton(
+                        child: FloatingActionButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -60,7 +60,7 @@ class _AddExpenseTypeState extends State<AddExpenseType> {
                         ),
                       ),
                       Expanded(
-                        child: FlatButton(
+                        child: FloatingActionButton(
                           child: const Text(
                             'Add',
                             style: TextStyle(color: Colors.white),
@@ -73,7 +73,7 @@ class _AddExpenseTypeState extends State<AddExpenseType> {
                               Navigator.pop(context);
                             }
                           },
-                          color: Colors.green,
+                          backgroundColor: Colors.green,
                         ),
                       ),
                     ],
@@ -92,8 +92,5 @@ Future saveCahanges(String expenseType) async {
   FirebaseFirestore.instance
       .collection("ExpenseTypes")
       .doc(expenseType + "_" + FirebaseAuth.instance.currentUser!.uid)
-      .set({
-    'TypeName': expenseType,
-    'UserID': FirebaseAuth.instance.currentUser!.uid
-  });
+      .set({'TypeName': expenseType, 'UserID': FirebaseAuth.instance.currentUser!.uid});
 }

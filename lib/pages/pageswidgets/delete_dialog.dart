@@ -14,23 +14,21 @@ DeleteDialog(DocumentSnapshot snapshot, BuildContext context) {
               title: const Text('Warning!'),
               content: const Text('Are you sure to delete?'),
               actions: <Widget>[
-                FlatButton(
+                FloatingActionButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   child: const Text("Cancel"),
                 ),
-                FlatButton(
+                FloatingActionButton(
                   child: const Text(
                     'Delete',
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    await snapshot.reference
-                        .delete()
-                        .whenComplete(() => Navigator.pop(context));
+                    await snapshot.reference.delete().whenComplete(() => Navigator.pop(context));
                   },
-                  color: const Color.fromARGB(255, 175, 13, 1),
+                  backgroundColor: const Color.fromARGB(255, 175, 13, 1),
                 ),
               ],
             ),
